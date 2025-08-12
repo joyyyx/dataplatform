@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据平台产品需求文档 (PRD)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 左侧导航栏 */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+        
+        .sidebar-header h1 {
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-header .subtitle {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .nav-menu {
+            padding: 20px 0;
+        }
+        
+        .nav-item {
+            margin: 0;
+        }
+        
+        .nav-item a {
+            display: block;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-item a:hover {
+            background: rgba(255,255,255,0.1);
+            border-left-color: #fff;
+            padding-left: 25px;
+        }
+        
+        .nav-item.active a {
+            background: rgba(255,255,255,0.2);
+            border-left-color: #fff;
+        }
+        
+        .nav-item a .icon {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 0;
+        }
+        
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        /* 文档头部 */
+        .document-header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 3px solid #667eea;
+            margin-bottom: 40px;
+        }
+        
+        .document-header h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        .document-header .subtitle {
+            color: #666;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+        
+        .document-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.95em;
+            color: #888;
+        }
+        
+        /* 章节样式 */
+        section {
+            margin-bottom: 50px;
+            scroll-margin-top: 20px;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+            font-weight: 400;
+        }
+        
+        h3 {
+            color: #495057;
+            font-size: 1.6em;
+            margin: 30px 0 20px 0;
+            font-weight: 500;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.3em;
+            margin: 25px 0 15px 0;
+            font-weight: 500;
+        }
+        
+        /* 功能卡片网格 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        .feature-card h4 {
+            margin-top: 0;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-card .icon {
+            font-size: 1.5em;
+        }
+        
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 500;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        /* 架构图样式 */
+        .architecture-diagram {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .arch-layer {
+            background: white;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .arch-layer:hover {
+            transform: scale(1.02);
+        }
+        
+        .arch-layer h4 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+        
+        /* 状态标签 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status-core { 
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); 
+            color: #155724; 
+        }
+        
+        .status-extension { 
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); 
+            color: #856404; 
+        }
+        
+        .status-future { 
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); 
+            color: #721c24; 
+        }
+        
+        /* 列表样式 */
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        /* 强调文本 */
+        .highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        /* 页脚 */
+        .document-footer {
+            margin-top: 60px;
+            padding: 40px 0;
+            border-top: 2px solid #e9ecef;
+            text-align: center;
+            color: #666;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+        }
+        
+        .document-footer h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .content-wrapper {
+                padding: 20px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 滚动条样式 */
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 左侧导航栏 -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>数据平台 PRD</h1>
+                <div class="subtitle">产品需求文档</div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a href="#overview">
+                        <span class="icon">📊</span>
+                        产品概述
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#data-access">
+                        <span class="icon">🔌</span>
+                        数据接入
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#task-schedule">
+                        <span class="icon">⏰</span>
+                        任务调度
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#metadata">
+                        <span class="icon">📚</span>
+                        元数据管理
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#lineage">
+                        <span class="icon">🔗</span>
+                        数据血缘
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#api-services">
+                        <span class="icon">🚀</span>
+                        API服务
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#architecture">
+                        <span class="icon">🏗️</span>
+                        技术架构
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#implementation">
+                        <span class="icon">⚙️</span>
+                        实施方案
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#roadmap">
+                        <span class="icon">🗺️</span>
+                        产品路线图
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <div class="document-header">
+                    <h1>数据平台产品需求文档</h1>
+                    <div class="subtitle">医疗数据集成与管理平台 PRD</div>
+                    <div class="document-meta">
+                        <span><strong>文档版本：</strong>2.0</span>
+                        <span><strong>创建日期：</strong>2024年12月</span>
+                        <span><strong>适用范围：</strong>医疗数据平台建设</span>
+                    </div>
+                </div>
+
+                <section id="overview">
+                    <h2>📊 产品概述</h2>
+                    
+                    <div class="highlight">
+                        <h3 style="color: white; margin-top: 0;">产品定位</h3>
+                        <p>数据平台是面向医疗机构的统一数据集成、管理和服务平台，主要应用于医疗数据的对接，包括HIS、LIS、PACS、EMR等各类医疗信息系统。通过构建统一的数据底座，为医疗机构提供数据治理、数据服务和数据应用的全链路解决方案。</p>
+                    </div>
+
+                    <h3>核心价值主张</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">🔗</span>统一数据接入</h4>
+                            <p>支持多种数据源的统一接入，包括数据库直连、HTTP服务、文件上传、实时CDC等，满足不同场景的数据集成需求。</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">⚡</span>智能任务调度</h4>
+                            <p>提供可视化的工作流设计和强大的任务调度能力，支持复杂的数据处理流程和依赖管理。</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">📋</span>完整元数据管理</h4>
+                            <p>建立统一的数据目录和数据字典，支持多模态数据的索引和权限控制。</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🎯</span>标准化API服务</h4>
+                            <p>通过标准化API接口对外提供数据服务，支持权限控制和数据安全管理。</p>
+                        </div>
+                    </div>
+
+                    <h3>应用场景</h3>
+                    <ul>
+                        <li><strong>医院数据中台建设：</strong>整合院内各信息系统数据，构建统一数据视图</li>
+                        <li><strong>区域数据平台：</strong>汇聚区域内多家医疗机构数据，支持区域卫生管理</li>
+                        <li><strong>医疗质控平台：</strong>基于标准化数据进行医疗质量控制和分析</li>
+                        <li><strong>科研数据支撑：</strong>为医疗科研提供标准化、高质量的数据服务</li>
+                    </ul>
+                </section>
+
+                <section id="data-access">
+                    <h2>🔌 数据接入</h2>
+                    
+                    <p>数据接入是数据平台的核心基础能力，提供企业级的多源数据统一接入和生命周期管理。平台支持灵活的数据同步策略，可根据业务实时性要求和数据量规模，配置从T+1批量处理到准实时增量同步的多种抽取模式。</p>
+
+                    <h3>数据源配置</h3>
+                    
+                    <h4>数据库连接支持</h4>
+                    <p>支持主流数据库的连接和数据抽取：</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>数据库类型</th>
+                                <th>抽取策略</th>
+                                <th>适用场景</th>
+                                <th>实施难度</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>MySQL</td>
+                                <td>T+1, 小时级, 实时CDC</td>
+                                <td>HIS、EMR等核心系统</td>
+                                <td>低</td>
+                            </tr>
+                            <tr>
+                                <td>SQL Server</td>
+                                <td>T+1, 发布订阅</td>
+                                <td>LIS、PACS等专业系统</td>
+                                <td>中</td>
+                            </tr>
+                            <tr>
+                                <td>Oracle</td>
+                                <td>T+1, OGG实时同步</td>
+                                <td>大型HIS、财务系统</td>
+                                <td>高</td>
+                            </tr>
+                            <tr>
+                                <td>PostgreSQL</td>
+                                <td>T+1, 逻辑复制</td>
+                                <td>开源医疗系统</td>
+                                <td>中</td>
+                            </tr>
+                            <tr>
+                                <td>Cache/IRIS</td>
+                                <td>T+1, 自定义接口</td>
+                                <td>特殊医疗系统</td>
+                                <td>高</td>
+                            </tr>
+                            <tr>
+                                <td>Hive</td>
+                                <td>批量处理</td>
+                                <td>大数据分析场景</td>
+                                <td>中</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>数据接入方式</h4>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">📋</span>开放视图</h4>
+                            <p><strong>实施方式：</strong>基于标准化接口规范，由业务系统厂商按照数据平台提供的视图模板进行数据暴露</p>
+                            <ul>
+                                <li>提供标准化数据结构定义和接口规范</li>
+                                <li>输出详细的视图创建指导文档和最佳实践</li>
+                                <li>内置数据质量验证规则和异常处理机制</li>
+                                <li>通常涉及厂商定制开发费用</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔓</span>开放数据库只读权限</h4>
+                            <p><strong>实施方式：</strong>通过只读数据库账户获取源系统数据，在数据平台侧进行统一的数据治理和清洗加工</p>
+                            <ul>
+                                <li>单个医疗机构数据治理周期通常为1-2周</li>
+                                <li>建立安全的网络连接和访问控制机制</li>
+                                <li>设计标准化的数据清洗和转换流程</li>
+                                <li>构建高效的本地数据存储和管理体系</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🌐</span>调用HTTP服务</h4>
+                            <p><strong>支持协议：</strong>WebService或者RESTful</p>
+                            <ul>
+                                <li>支持HTTP返回数据json、xml格式的解析</li>
+                                <li>传参支持使用变量循环读取</li>
+                                <li>SOAP协议支持</li>
+                                <li>认证方式：Basic Auth, Token</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">📤</span>发布HTTP服务</h4>
+                            <p><strong>服务模式：</strong>提供API接口，由数据中台推送数据</p>
+                            <ul>
+                                <li>RESTful API设计</li>
+                                <li>数据推送机制</li>
+                                <li>错误重试策略</li>
+                                <li>推送状态监控</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>实时数据对接</h4>
+                    <p>实时数据对接采用变更数据捕获(CDC)技术，实现毫秒级的数据同步。该方案需要在源系统部署CDC组件，虽然运维复杂度较高，但能提供最佳的数据实时性，特别适用于对数据时效性要求极高的业务场景。</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">📊</span>SQL Server发布订阅</h4>
+                            <ul>
+                                <li>实时性：秒级</li>
+                                <li>运维复杂度：中等</li>
+                                <li>适用于SQL Server环境</li>
+                                <li>需要配置发布订阅关系</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">⚡</span>Oracle GoldenGate (OGG)</h4>
+                            <ul>
+                                <li>实时性：毫秒级</li>
+                                <li>运维复杂度：高</li>
+                                <li>适用于Oracle环境</li>
+                                <li>企业级实时同步方案</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔄</span>Flink CDC</h4>
+                            <ul>
+                                <li>实时性：秒级</li>
+                                <li>运维复杂度：中等</li>
+                                <li>支持MySQL、PostgreSQL等</li>
+                                <li>开源流式处理方案</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>SDK定制化开发</h4>
+                    <p>针对特殊业务场景和技术栈，提供多语言SDK开发包，支持Java、Python、.NET等主流开发语言。通过标准化的API接口和SDK封装，降低系统集成复杂度，提供灵活的定制化数据接入解决方案。</p>
+
+                    <h4>文件上传</h4>
+                    <p>文件上传主要应用于区域级数据汇聚场景，如医疗机构向区域平台上报病案首页、质控数据、统计报表等结构化数据文件。该方式适合数据量相对较小、更新频率较低的业务场景，通常不适用于院内实时业务系统的数据集成。</p>
+                    <ul>
+                        <li><strong>支持格式：</strong>Excel (.xlsx, .xls), CSV, TXT, JSON</li>
+                        <li><strong>应用场景：</strong>病案首页上传、基线调研数据、质控数据等</li>
+                        <li><strong>处理能力：</strong>适合小数据量场景</li>
+                        <li><strong>数据验证：</strong>格式校验、必填项检查、数据类型验证</li>
+                    </ul>
+                </section>
+
+                <section id="task-schedule">
+                    <h2>⏰ 任务调度</h2>
+                    
+                    <p>任务调度模块是数据平台的核心引擎，提供企业级的工作流编排、任务依赖管理和智能调度能力。通过集成业界成熟的调度框架，构建高可用、可扩展的数据处理流水线。</p>
+
+                    <h3>任务配置与依赖管理</h3>
+                    
+                    <h4>Apache DolphinScheduler集成方案</h4>
+                    <p>推荐采用Apache DolphinScheduler作为核心调度引擎，通过以下方式实现深度集成：</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">🔧</span>集成架构设计</h4>
+                            <ul>
+                                <li>通过REST API与DolphinScheduler进行交互</li>
+                                <li>封装统一的调度服务接口层</li>
+                                <li>实现任务状态的实时同步机制</li>
+                                <li>建立统一的用户权限映射体系</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">📊</span>可视化集成</h4>
+                            <ul>
+                                <li>在数据平台UI中嵌入工作流设计器</li>
+                                <li>提供拖拽式任务编排界面</li>
+                                <li>集成任务执行监控和日志查看</li>
+                                <li>统一的告警和通知机制</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔄</span>数据流集成</h4>
+                            <ul>
+                                <li>自动注册数据平台的ETL任务</li>
+                                <li>支持数据血缘关系的自动发现</li>
+                                <li>实现任务执行结果的元数据更新</li>
+                                <li>提供任务性能指标的统计分析</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">⚙️</span>运维集成</h4>
+                            <ul>
+                                <li>统一的部署和配置管理</li>
+                                <li>集成健康检查和故障恢复</li>
+                                <li>提供调度资源的动态分配</li>
+                                <li>支持多环境的配置隔离</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">📊</span>可视化工作流设计</h4>
+                            <ul>
+                                <li>拖拽式流程设计器</li>
+                                <li>丰富的任务节点类型</li>
+                                <li>条件分支和循环支持</li>
+                                <li>并行执行控制</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔗</span>任务依赖管理</h4>
+                            <ul>
+                                <li>上下游任务依赖配置</li>
+                                <li>跨工作流依赖关系</li>
+                                <li>失败重试策略</li>
+                                <li>超时处理机制</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">⏱️</span>定时调度策略</h4>
+                            <ul>
+                                <li>Cron表达式支持</li>
+                                <li>补数据功能</li>
+                                <li>暂停/恢复调度</li>
+                                <li>调度日历管理</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">📈</span>监控告警</h4>
+                            <ul>
+                                <li>实时执行状态监控</li>
+                                <li>邮件/短信告警</li>
+                                <li>执行日志查看</li>
+                                <li>性能指标统计</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>ETL数据流处理</h3>
+                    
+                    <h4>ETL引擎集成方案</h4>
+                    <p>集成Kettle/Apache Hop作为数据转换引擎，提供强大的数据处理和转换能力。通过统一的ETL管理平台，实现可视化的数据流设计和执行。</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">🎯</span>Kettle集成策略</h4>
+                            <ul>
+                                <li>通过Carte服务器实现远程ETL执行</li>
+                                <li>集成Spoon设计器到Web界面</li>
+                                <li>建立.ktr/.kjb文件的版本管理</li>
+                                <li>提供ETL任务的参数化配置</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🚀</span>Apache Hop集成优势</h4>
+                            <ul>
+                                <li>原生支持云原生和容器化部署</li>
+                                <li>更好的元数据管理和血缘追踪</li>
+                                <li>现代化的Web界面和用户体验</li>
+                                <li>增强的项目和环境管理能力</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4>调度引擎协同工作模式</h4>
+                    <p>建立DolphinScheduler + ETL引擎的协同工作机制：</p>
+                    <ul>
+                        <li><strong>任务编排：</strong>在DolphinScheduler中创建ETL任务节点，调用Kettle/Hop执行具体的数据转换</li>
+                        <li><strong>参数传递：</strong>支持动态参数传递，实现灵活的数据处理逻辑</li>
+                        <li><strong>状态监控：</strong>实时监控ETL任务执行状态，提供详细的执行日志和错误信息</li>
+                        <li><strong>资源管理：</strong>统一管理ETL执行资源，支持负载均衡和故障转移</li>
+                    </ul>
+
+                    <h3>集成实施建议</h3>
+                    
+                    <h4>技术架构设计</h4>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">🏗️</span>微服务架构</h4>
+                            <ul>
+                                <li>将调度服务封装为独立的微服务模块</li>
+                                <li>通过服务注册中心实现服务发现</li>
+                                <li>采用消息队列进行异步通信</li>
+                                <li>实现服务的水平扩展和负载均衡</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔄</span>API网关集成</h4>
+                            <ul>
+                                <li>统一的API入口和路由管理</li>
+                                <li>实现认证授权和限流控制</li>
+                                <li>提供API版本管理和灰度发布</li>
+                                <li>集成监控和日志收集</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">📊</span>数据同步机制</h4>
+                            <ul>
+                                <li>建立任务状态的实时同步</li>
+                                <li>实现元数据的双向同步</li>
+                                <li>支持增量和全量数据同步</li>
+                                <li>提供数据一致性校验</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🛡️</span>容错与恢复</h4>
+                            <ul>
+                                <li>实现断路器模式防止级联故障</li>
+                                <li>支持任务的自动重试和补偿</li>
+                                <li>提供多活部署和故障切换</li>
+                                <li>建立完善的监控告警体系</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>部署策略</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>部署方式</th>
+                                <th>技术方案</th>
+                                <th>适用场景</th>
+                                <th>优势</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>容器化部署</td>
+                                <td>Docker + Kubernetes</td>
+                                <td>云原生环境</td>
+                                <td>弹性扩展、资源隔离</td>
+                            </tr>
+                            <tr>
+                                <td>虚拟机部署</td>
+                                <td>传统VM + 负载均衡</td>
+                                <td>传统IT环境</td>
+                                <td>稳定可靠、易于管理</td>
+                            </tr>
+                            <tr>
+                                <td>混合部署</td>
+                                <td>容器 + VM 混合</td>
+                                <td>渐进式迁移</td>
+                                <td>平滑过渡、风险可控</td>
+                            </tr>
+                            <tr>
+                                <td>边缘部署</td>
+                                <td>边缘计算节点</td>
+                                <td>分布式场景</td>
+                                <td>就近处理、降低延迟</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">🔄</span>Kettle集成</h4>
+                            <ul>
+                                <li>支持.ktr转换文件</li>
+                                <li>支持.kjb作业文件</li>
+                                <li>丰富的数据源连接器</li>
+                                <li>强大的数据转换能力</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🚀</span>Apache Hop集成</h4>
+                            <ul>
+                                <li>现代化ETL工具</li>
+                                <li>云原生架构设计</li>
+                                <li>更好的元数据管理</li>
+                                <li>容器化部署支持</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>调度策略配置</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>调度类型</th>
+                                <th>触发方式</th>
+                                <th>适用场景</th>
+                                <th>配置示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>定时调度</td>
+                                <td>Cron表达式</td>
+                                <td>日常数据同步</td>
+                                <td>0 2 * * * (每天凌晨2点)</td>
+                            </tr>
+                            <tr>
+                                <td>依赖调度</td>
+                                <td>上游任务完成</td>
+                                <td>数据处理链路</td>
+                                <td>数据清洗→质量检测→入库</td>
+                            </tr>
+                            <tr>
+                                <td>手动触发</td>
+                                <td>用户操作</td>
+                                <td>临时数据处理</td>
+                                <td>一次性数据导入</td>
+                            </tr>
+                            <tr>
+                                <td>事件触发</td>
+                                <td>文件到达/API调用</td>
+                                <td>实时数据处理</td>
+                                <td>文件监控目录</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="metadata">
+                    <h2>📚 元数据管理</h2>
+                    
+                    <p>元数据管理采用多模态数据统一索引架构，为每个数据单元（数据表、图片文件、CSV文件、文档等）建立唯一的数据标识和元信息描述。通过细粒度的权限控制体系，实现数据单元级别的访问管理，并提供统一的数据发现和获取服务接口。</p>
+
+                    <h3>多模态数据索引</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">📊</span>结构化数据</h4>
+                            <ul>
+                                <li>数据表元信息管理</li>
+                                <li>字段定义和约束</li>
+                                <li>数据字典维护</li>
+                                <li>表关系映射</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🖼️</span>非结构化数据</h4>
+                            <ul>
+                                <li>图片文件索引</li>
+                                <li>文档文件管理</li>
+                                <li>多媒体资源</li>
+                                <li>文件版本控制</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">📄</span>半结构化数据</h4>
+                            <ul>
+                                <li>CSV文件结构解析</li>
+                                <li>JSON数据模式</li>
+                                <li>XML文档结构</li>
+                                <li>日志文件格式</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔐</span>数据单元权限控制</h4>
+                            <ul>
+                                <li>表级权限管理</li>
+                                <li>字段级访问控制</li>
+                                <li>文件级权限设置</li>
+                                <li>角色权限继承</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>统一数据获取通道</h3>
+                    <p>构建企业级的统一数据访问层，通过元数据索引驱动的智能路由机制，实现跨异构数据源的统一查询和访问。</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">🔍</span>智能查询引擎</h4>
+                            <ul>
+                                <li>支持SQL、NoSQL、GraphQL等多种查询语言</li>
+                                <li>自动优化查询执行计划</li>
+                                <li>实现跨数据源的联邦查询</li>
+                                <li>提供查询结果缓存和预计算</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🛡️</span>安全访问控制</h4>
+                            <ul>
+                                <li>基于RBAC的细粒度权限控制</li>
+                                <li>支持数据脱敏和字段级权限</li>
+                                <li>实现审计日志和访问追踪</li>
+                                <li>提供数据水印和防泄漏机制</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔄</span>数据转换服务</h4>
+                            <ul>
+                                <li>自动进行数据格式标准化</li>
+                                <li>支持实时数据类型转换</li>
+                                <li>提供数据编码和字符集转换</li>
+                                <li>实现业务规则驱动的数据转换</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">⚡</span>性能优化</h4>
+                            <ul>
+                                <li>多级缓存策略提升响应速度</li>
+                                <li>智能预加载和数据预热</li>
+                                <li>支持并行查询和结果合并</li>
+                                <li>提供查询性能监控和调优</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>数据目录管理</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>数据类型</th>
+                                <th>索引内容</th>
+                                <th>权限粒度</th>
+                                <th>应用场景</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>数据表</td>
+                                <td>表结构、字段类型、约束关系</td>
+                                <td>表级、字段级</td>
+                                <td>结构化数据访问</td>
+                            </tr>
+                            <tr>
+                                <td>图片文件</td>
+                                <td>文件路径、格式、大小、创建时间</td>
+                                <td>文件级</td>
+                                <td>医学影像管理</td>
+                            </tr>
+                            <tr>
+                                <td>CSV文件</td>
+                                <td>文件结构、字段定义、数据量</td>
+                                <td>文件级、字段级</td>
+                                <td>批量数据导入</td>
+                            </tr>
+                            <tr>
+                                <td>文档资料</td>
+                                <td>文档类型、内容摘要、标签</td>
+                                <td>文档级</td>
+                                <td>知识管理</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="lineage">
+                    <h2>🔗 数据血缘</h2>
+                    
+                    <p>数据血缘管理提供多层次的数据流向追踪能力，支持表级血缘关系分析和字段级精细化血缘追踪。对于非结构化数据如医学影像，同样提供完整的数据来源追溯，确保数据的可追溯性和合规性管理。</p>
+
+                    <h3>血缘追踪能力</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">📋</span>表级血缘</h4>
+                            <ul>
+                                <li>数据表间依赖关系</li>
+                                <li>ETL流程追踪</li>
+                                <li>数据流向分析</li>
+                                <li>影响范围评估</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔍</span>字段级血缘</h4>
+                            <ul>
+                                <li>字段映射关系</li>
+                                <li>数据转换逻辑</li>
+                                <li>计算字段来源</li>
+                                <li>数据质量传递</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🖼️</span>图片数据来源</h4>
+                            <ul>
+                                <li>图片来源系统追踪</li>
+                                <li>文件处理历史</li>
+                                <li>版本变更记录</li>
+                                <li>存储位置管理</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">📊</span>可视化展示</h4>
+                            <ul>
+                                <li>血缘关系图谱</li>
+                                <li>交互式探索</li>
+                                <li>多层级展示</li>
+                                <li>影响分析报告</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>血缘分析应用</h3>
+                    <ul>
+                        <li><strong>变更影响分析：</strong>评估数据结构变更对下游系统的影响</li>
+                        <li><strong>数据质量追溯：</strong>快速定位数据质量问题的根源</li>
+                        <li><strong>合规性审计：</strong>满足数据治理和合规要求</li>
+                        <li><strong>系统优化：</strong>识别数据处理瓶颈和优化点</li>
+                    </ul>
+                </section>
+
+                <section id="api-services">
+                    <h2>🚀 API服务</h2>
+                    
+                    <p>API服务模块基于元数据管理的统一数据索引，提供标准化的数据服务接口。通过智能的权限判断机制，确保数据访问的安全性和合规性，同时提供高性能、高可用的数据服务能力。</p>
+
+                    <h3>数据服务能力</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">🔌</span>RESTful API</h4>
+                            <ul>
+                                <li>标准HTTP协议</li>
+                                <li>JSON数据格式</li>
+                                <li>资源化URL设计</li>
+                                <li>状态码规范</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔐</span>权限验证</h4>
+                            <ul>
+                                <li>基于元数据索引的权限判断</li>
+                                <li>Token认证机制</li>
+                                <li>角色权限控制</li>
+                                <li>访问日志审计</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">⚡</span>性能优化</h4>
+                            <ul>
+                                <li>请求频率限制</li>
+                                <li>并发连接控制</li>
+                                <li>响应时间监控</li>
+                                <li>缓存策略优化</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">📖</span>接口文档</h4>
+                            <ul>
+                                <li>自动生成API文档</li>
+                                <li>在线测试工具</li>
+                                <li>SDK代码示例</li>
+                                <li>版本管理</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>API服务类型</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>服务类型</th>
+                                <th>功能描述</th>
+                                <th>权限控制</th>
+                                <th>应用场景</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>数据查询服务</td>
+                                <td>按条件查询各类数据</td>
+                                <td>基于元数据索引权限</td>
+                                <td>业务系统数据获取</td>
+                            </tr>
+                            <tr>
+                                <td>文件访问服务</td>
+                                <td>图片、文档等文件访问</td>
+                                <td>文件级权限控制</td>
+                                <td>多媒体数据访问</td>
+                            </tr>
+                            <tr>
+                                <td>统计分析服务</td>
+                                <td>数据统计和聚合分析</td>
+                                <td>数据范围权限</td>
+                                <td>报表和仪表板</td>
+                            </tr>
+                            <tr>
+                                <td>元数据服务</td>
+                                <td>获取数据结构信息</td>
+                                <td>元数据访问权限</td>
+                                <td>数据发现和探索</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="architecture">
+                    <h2>🏗️ 技术架构</h2>
+                    
+                    <p>数据平台采用分层架构设计，支持灵活的技术选型和扩展能力。</p>
+
+                    <div class="architecture-diagram">
+                        <h3>系统架构图</h3>
+                        <div class="arch-layer">
+                            <h4>🖥️ 应用层</h4>
+                            <p>数据门户 | 管理控制台 | 第三方应用集成</p>
+                        </div>
+                        <div class="arch-layer">
+                            <h4>🚀 服务层</h4>
+                            <p>API网关 | 数据服务 | 权限管理 | 监控告警</p>
+                        </div>
+                        <div class="arch-layer">
+                            <h4>⚙️ 处理层</h4>
+                            <p>ETL引擎 | 任务调度 | 数据质量 | 血缘分析</p>
+                        </div>
+                        <div class="arch-layer">
+                            <h4>💾 存储层</h4>
+                            <p>关系数据库 | 文档存储 | 对象存储 | 缓存系统</p>
+                        </div>
+                        <div class="arch-layer">
+                            <h4>🔌 数据源层</h4>
+                            <p>HIS | LIS | PACS | EMR | 第三方系统</p>
+                        </div>
+                    </div>
+
+                    <h3>技术选型建议</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">🔧</span>核心框架</h4>
+                            <ul>
+                                <li>Spring Boot (微服务框架)</li>
+                                <li>Spring Cloud (微服务治理)</li>
+                                <li>Apache Kafka (消息队列)</li>
+                                <li>Redis (缓存系统)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">💾</span>数据存储</h4>
+                            <ul>
+                                <li>MySQL/PostgreSQL (关系数据库)</li>
+                                <li>Elasticsearch (搜索引擎)</li>
+                                <li>MongoDB (文档数据库)</li>
+                                <li>MinIO (对象存储)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">⚡</span>大数据组件</h4>
+                            <ul>
+                                <li>Apache Spark (批处理)</li>
+                                <li>Apache Flink (流处理)</li>
+                                <li>Apache Hive (数据仓库)</li>
+                                <li>Apache Airflow (工作流)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🌐</span>前端技术</h4>
+                            <ul>
+                                <li>React/Vue.js (前端框架)</li>
+                                <li>Ant Design (UI组件库)</li>
+                                <li>D3.js (数据可视化)</li>
+                                <li>WebSocket (实时通信)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="implementation">
+                    <h2>⚙️ 实施方案</h2>
+                    
+                    <h3>部署架构</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>部署模式</th>
+                                <th>适用场景</th>
+                                <th>优势</th>
+                                <th>考虑因素</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>单机部署</td>
+                                <td>小型医院、测试环境</td>
+                                <td>部署简单、成本低</td>
+                                <td>性能有限、无高可用</td>
+                            </tr>
+                            <tr>
+                                <td>集群部署</td>
+                                <td>中大型医院、生产环境</td>
+                                <td>高性能、高可用</td>
+                                <td>部署复杂、成本较高</td>
+                            </tr>
+                            <tr>
+                                <td>容器化部署</td>
+                                <td>云环境、微服务架构</td>
+                                <td>弹性扩展、易维护</td>
+                                <td>需要容器技术基础</td>
+                            </tr>
+                            <tr>
+                                <td>混合云部署</td>
+                                <td>多院区、区域平台</td>
+                                <td>灵活性高、数据就近</td>
+                                <td>网络复杂、安全要求高</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>实施步骤</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">1️⃣</span>需求调研</h4>
+                            <ul>
+                                <li>业务需求分析</li>
+                                <li>数据源梳理</li>
+                                <li>技术环境评估</li>
+                                <li>实施计划制定</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">2️⃣</span>环境搭建</h4>
+                            <ul>
+                                <li>基础环境准备</li>
+                                <li>平台软件安装</li>
+                                <li>网络安全配置</li>
+                                <li>系统集成测试</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">3️⃣</span>数据接入</h4>
+                            <ul>
+                                <li>数据源连接配置</li>
+                                <li>数据抽取规则设计</li>
+                                <li>数据清洗流程开发</li>
+                                <li>数据质量验证</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">4️⃣</span>上线运维</h4>
+                            <ul>
+                                <li>用户培训</li>
+                                <li>系统上线</li>
+                                <li>运维监控</li>
+                                <li>持续优化</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>成功要素</h3>
+                    <ul>
+                        <li><strong>领导支持：</strong>获得医院领导层的支持和资源投入</li>
+                        <li><strong>团队协作：</strong>建立跨部门的项目团队和协作机制</li>
+                        <li><strong>分步实施：</strong>采用分阶段、分模块的实施策略</li>
+                        <li><strong>持续改进：</strong>建立反馈机制，持续优化和完善</li>
+                    </ul>
+                </section>
+
+                <section id="roadmap">
+                    <h2>🗺️ 产品路线图</h2>
+                    
+                    <h3>版本规划</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>版本</th>
+                                <th>主要功能</th>
+                                <th>目标用户</th>
+                                <th>预期效果</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>v1.0 基础版</td>
+                                <td>数据接入、基础ETL、简单API</td>
+                                <td>小型医院</td>
+                                <td>解决基本数据集成需求</td>
+                            </tr>
+                            <tr>
+                                <td>v2.0 标准版</td>
+                                <td>任务调度、数据质量、权限管理</td>
+                                <td>中型医院</td>
+                                <td>建立完整数据治理体系</td>
+                            </tr>
+                            <tr>
+                                <td>v3.0 专业版</td>
+                                <td>数据血缘、元数据管理、高级分析</td>
+                                <td>大型医院</td>
+                                <td>实现智能化数据管理</td>
+                            </tr>
+                            <tr>
+                                <td>v4.0 企业版</td>
+                                <td>AI增强、实时计算、云原生</td>
+                                <td>医疗集团</td>
+                                <td>构建智慧医疗数据生态</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>技术发展方向</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><span class="icon">🤖</span>AI智能化</h4>
+                            <ul>
+                                <li>智能数据发现</li>
+                                <li>自动化数据治理</li>
+                                <li>异常检测算法</li>
+                                <li>智能推荐系统</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">☁️</span>云原生架构</h4>
+                            <ul>
+                                <li>微服务架构升级</li>
+                                <li>容器化部署</li>
+                                <li>服务网格集成</li>
+                                <li>弹性伸缩能力</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">⚡</span>实时计算</h4>
+                            <ul>
+                                <li>流式数据处理</li>
+                                <li>实时数据分析</li>
+                                <li>事件驱动架构</li>
+                                <li>边缘计算支持</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4><span class="icon">🔗</span>生态集成</h4>
+                            <ul>
+                                <li>更多数据源支持</li>
+                                <li>第三方工具集成</li>
+                                <li>开放API生态</li>
+                                <li>行业标准对接</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="document-footer">
+                    <h3>📞 联系我们</h3>
+                    <p><strong>产品咨询：</strong>了解更多产品功能和解决方案</p>
+                    <p><strong>技术支持：</strong>获取专业的技术支持和服务</p>
+                    <p><strong>商务合作：</strong>探讨合作机会和定制化需求</p>
+                    <div style="margin-top: 20px; font-size: 0.9em;">
+                        <p>© 2024 数据平台产品团队 | 版权所有</p>
+                        <p>本文档为产品需求规格说明，具体功能实现以实际产品为准</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 导航功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有导航链接和章节
+            const navLinks = document.querySelectorAll('.nav-item a');
+            const sections = document.querySelectorAll('section');
+            
+            // 点击导航链接时的处理
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 移除所有活动状态
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // 添加当前活动状态
+                    this.parentElement.classList.add('active');
+                    
+                    // 滚动到对应章节
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // 滚动时更新导航状态
+            window.addEventListener('scroll', function() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.parentElement.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.parentElement.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
